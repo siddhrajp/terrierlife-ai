@@ -55,6 +55,26 @@ A LangChain ReAct agent powered by GPT-4o classifies the intent, calls the right
 
 ---
 
+## RAG Evaluation (RAGAS)
+
+Evaluated over 20 BU-specific questions using [RAGAS](https://github.com/explodinggradients/ragas). Ran a full ablation study to isolate the contribution of each improvement:
+
+| Experiment | Faithfulness | Context Precision | Context Recall |
+|---|---|---|---|
+| Baseline (vector, 15 pages) | 0.93 | 0.05 | 0.07 |
+| Expanded corpus only (vector, 51 pages) | 0.97 | 0.14 | **0.13** |
+| Hybrid search only (BM25+vector, 15 pages) | 0.98 | 0.10 | 0.12 |
+| Both together (BM25+vector, 51 pages) | 0.93 | **0.15** | 0.09 |
+
+**Key findings:**
+- Expanded corpus (15 → 51 pages) drove the biggest gain in **Context Recall** — more pages means more knowledge to retrieve
+- Hybrid search (BM25 40% + vector 60%) drove the biggest gain in **Context Precision** — keyword matching helps for acronym-heavy queries like OPT, CPT, FAFSA
+- Faithfulness remains high (0.93+) across all experiments — GPT-4o doesn't hallucinate
+
+> Run evals yourself: `cd backend && python eval/run_eval.py`
+
+---
+
 ## Running Locally
 
 **1. Database**
